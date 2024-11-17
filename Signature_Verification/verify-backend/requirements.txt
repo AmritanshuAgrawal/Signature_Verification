@@ -1,0 +1,12 @@
+torchvision
+torch
+matplotlib
+numpy
+pillow
+pandas
+scikit-learn
+python-dotenv
+requests
+flask
+flask-cors
+scikit-image

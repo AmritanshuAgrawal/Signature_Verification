@@ -23,9 +23,9 @@ function Login() {
 
     try {
       const response = await axios.post("http://localhost:8000/", formData);
-      
+
       if (response.data === "exist") {
-        navigate("/form", { state: { id: formData.email }});
+        navigate("/form", { state: { id: formData.email } });
       } else if (response.data === "notexist") {
         setError("User has not signed up");
       }
@@ -36,67 +36,117 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h1 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Login
-          </h1>
-        </div>
-        
-        <form className="mt-8 space-y-6" onSubmit={submit}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        backgroundImage: `url('https://st2.depositphotos.com/11337508/46659/v/450/depositphotos_466592170-stock-illustration-character-signing-digital-signature-online.jpg')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      <div
+        style={{
+          backgroundColor: "rgba(255, 255, 255, 0.2)", // Glass effect
+          borderRadius: "16px",
+          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.2)",
+          backdropFilter: "blur(10px)",
+          WebkitBackdropFilter: "blur(10px)", // Safari compatibility
+          border: "1px solid rgba(255, 255, 255, 0.3)",
+          padding: "30px",
+          textAlign: "center",
+          width: "400px", // Increased box size
+        }}
+      >
+        <h1
+          style={{
+            fontSize: "28px",
+            fontWeight: "bold",
+            color: "white",
+            marginBottom: "20px",
+          }}
+        >
+          LOGIN
+        </h1>
+        <form onSubmit={submit}>
           {error && (
-            <div className="text-red-500 text-center text-sm">
+            <div
+              style={{
+                color: "red",
+                marginBottom: "10px",
+                fontSize: "14px",
+                fontWeight: "bold",
+              }}
+            >
               {error}
             </div>
           )}
-          
-          <div className="rounded-md shadow-sm space-y-4">
-            <div>
-              <input
-                type="email"
-                name="email"
-                required
-                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Email address"
-                value={formData.email}
-                onChange={handleChange}
-              />
-            </div>
-            
-            <div>
-              <input
-                type="password"
-                name="password"
-                required
-                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleChange}
-              />
-            </div>
+          <div style={{ marginBottom: "15px" }}>
+            <input
+              type="email"
+              name="email"
+              required
+              style={{
+                width: "100%",
+                padding: "12px",
+                border: "none",
+                borderRadius: "8px",
+                boxSizing: "border-box",
+                backgroundColor: "rgba(255, 255, 255, 0.7)",
+                color: "black",
+                fontSize: "16px",
+              }}
+              placeholder="Username"
+              value={formData.email}
+              onChange={handleChange}
+            />
           </div>
-
-          <div>
-            <button
-              type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              Sign in
-            </button>
+          <div style={{ marginBottom: "15px" }}>
+            <input
+              type="password"
+              name="password"
+              required
+              style={{
+                width: "100%",
+                padding: "12px",
+                border: "none",
+                borderRadius: "8px",
+                boxSizing: "border-box",
+                backgroundColor: "rgba(255, 255, 255, 0.7)",
+                color: "black",
+                fontSize: "16px",
+              }}
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+            />
           </div>
+          <button
+            type="submit"
+            style={{
+              width: "100%",
+              padding: "12px",
+              backgroundColor: "black",
+              color: "white",
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+              fontSize: "16px",
+            }}
+          >
+            Login
+          </button>
         </form>
-
-        <div className="text-center">
-          <p className="mt-2 text-sm text-gray-600">
-            Or{' '}
-            <Link
-              to="/signup"
-              className="font-medium text-indigo-600 hover:text-indigo-500"
-            >
-              Sign up
-            </Link>
-          </p>
+        <div style={{ marginTop: "15px", fontSize: "14px", color: "white" }}>
+          Don't have an account?{" "}
+          <Link
+            to="/signup"
+            style={{ color: "cyan", textDecoration: "none", fontWeight: "bold" }}
+          >
+            Signup
+          </Link>
         </div>
       </div>
     </div>

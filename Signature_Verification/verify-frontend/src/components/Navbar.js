@@ -34,21 +34,20 @@ const Navbar = () => {
                     </Link>
                 </Popover.Group>
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                    <Link to="/" className="-m-1.5 p-1.5">
-                        <a 
-                            className="text-sm font-semibold leading-6"
-                            style={{
-                                backgroundColor: "#ff4d4d",
-                                color: "#fff",
-                                border: "none",
-                                borderRadius: "5px",
-                                padding: "10px 20px",
-                                cursor: "pointer",
-                                fontWeight: "bold",
-                            }}
-                        >
-                            Logout <span aria-hidden="true">&rarr;</span>
-                        </a>
+                    <Link 
+                        to="/" 
+                        className="text-sm font-semibold leading-6"
+                        style={{
+                            backgroundColor: "#ff4d4d",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "5px",
+                            padding: "10px 20px",
+                            cursor: "pointer",
+                            fontWeight: "bold",
+                        }}
+                    >
+                        Logout <span aria-hidden="true">&rarr;</span>
                     </Link>
                 </div>
             </nav>

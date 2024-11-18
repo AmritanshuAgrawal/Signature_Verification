@@ -118,8 +118,8 @@ function Signup() {
           </button>
         </form>
         <div style={{ marginTop: "15px", fontSize: "14px", color: "white" }}>
-          Don't have an account?{" "}
-          <Link
+        Already have an account?{" "}
+        <Link
             to="/"
             style={{ color: "cyan", textDecoration: "none", fontWeight: "bold" }}
           >

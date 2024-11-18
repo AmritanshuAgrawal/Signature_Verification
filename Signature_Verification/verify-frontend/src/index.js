@@ -4,11 +4,11 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { createBrowserRouter, Link, RouterProvider } from "react-router-dom";
-// import CreateUser from "./CreateUser";
+import CreateUser from "./CreateUser";
 import Login from "./Login/Login";
 import Signup from "./Login/Signup";
-// import Form from "./components/Form";
-// import Navbar from "./components/Navbar";
+import Form from "./components/Form";
+import Navbar from "./components/Navbar";
 
 const router = createBrowserRouter([
     {
@@ -27,19 +27,19 @@ const router = createBrowserRouter([
         path: "/signup", 
         element: <Signup /> 
     },
-    // { 
-    //     path: "/form", 
-    //     element: (
-    //         <>
-    //             <Navbar />
-    //             <Form />
-    //         </>
-    //     )
-    // },
-    // { 
-    //     path: "/createUser", 
-    //     element: <CreateUser /> 
-    // },      
+    { 
+        path: "/form", 
+        element: (
+            <>
+                <Navbar />
+                <Form />
+            </>
+        )
+    },
+    { 
+        path: "/createUser", 
+        element: <CreateUser /> 
+    },      
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

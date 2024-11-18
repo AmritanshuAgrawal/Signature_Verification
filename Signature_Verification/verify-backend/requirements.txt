@@ -10,3 +10,4 @@ requests
 flask
 flask-cors
 scikit-image
+pymongo

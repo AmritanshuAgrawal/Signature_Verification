@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { PhotoIcon } from "@heroicons/react/24/solid";
+import bgImage from "../images/bg.jpeg";
 
 const CreateUserForm = () => {
   const [name, setName] = useState("");
@@ -49,110 +50,169 @@ const CreateUserForm = () => {
   };
 
   return (
-    <div>
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          {/* <img
-                        className="mx-auto h-10 w-auto"
-                        src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                        alt="Your Company"
-                    /> */}
-          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Create a User
-          </h2>
-        </div>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        paddingTop: "50px",
+      }}
+    >
+      <div
+        style={{
+          backgroundColor: "rgba(255, 255, 255, 0.9)",
+          padding: "20px",
+          borderRadius: "16px",
+          width: "60%",
+          maxWidth: "800px",
+          boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)",
+          textAlign: "center",
+        }}
+      >
+        <h1 style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "20px" }}>
+          Create a User
+        </h1>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            <div>
-              <label className="block text-sm font-medium leading-6 text-gray-900">
-                Name
-              </label>
-              <div className="mt-2">
-                <input
-                  type="text"
-                  required
-                  className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-700	 sm:text-sm sm:leading-6"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </div>
-            </div>
+        <form onSubmit={handleSubmit}>
+          {/* Name Field */}
+          <div style={{ marginBottom: "20px" }}>
+            <label
+              htmlFor="name"
+              style={{ display: "block", fontWeight: "bold", marginBottom: "10px" }}
+            >
+              Name
+            </label>
+            <input
+              type="text"
+              required
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "10px",
+                border: "1px solid #ccc",
+                borderRadius: "8px",
+                fontSize: "16px",
+                marginBottom: "10px",
+              }}
+            />
+          </div>
 
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Email address
-              </label>
-              <div className="mt-2">
-                <input
-                  type="email"
-                  autoComplete="email"
-                  required
-                  className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-700	 sm:text-sm sm:leading-6"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-            </div>
+          {/* Email Field */}
+          <div style={{ marginBottom: "20px" }}>
+            <label
+              htmlFor="email"
+              style={{ display: "block", fontWeight: "bold", marginBottom: "10px" }}
+            >
+              Email Address
+            </label>
+            <input
+              type="email"
+              required
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "10px",
+                border: "1px solid #ccc",
+                borderRadius: "8px",
+                fontSize: "16px",
+                marginBottom: "10px",
+              }}
+            />
+          </div>
 
-            {/* Genuine Signature Upload */}
-            <div>
-              <label className="block text-sm font-medium leading-6 text-gray-900">
-                Genuine Signature
-              </label>
-              <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 p-6">
-                {genuineImagePreview ? (
-                  <div>
-                    <img
-                      src={genuineImagePreview}
-                      alt="Genuine Signature Preview"
-                      className="max-h-60"
-                    />
-                    <button
-                      type="button"
-                      onClick={resetGenuineImage}
-                      className="text-center text-sm relative cursor-pointer rounded-md bg-white text-blue-700	 focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-700	 focus-within:ring-offset-2 hover:text-blue-500	"
-                    >
-                      Change Image
-                    </button>
-                  </div>
-                ) : (
-                  <div className="space-y-1 text-center">
-                    <PhotoIcon className="mx-auto h-12 w-12 text-gray-400" />
-                    <div className="flex text-sm text-gray-600">
-                      <label
-                        htmlFor="genuine-signature"
-                        className="relative cursor-pointer rounded-md bg-white text-blue-700	 focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500	 focus-within:ring-offset-2 hover:text-blue-500	"
-                      >
-                        <span>Upload a file</span>
-                        <input
-                          id="genuine-signature"
-                          name="genuineSignature"
-                          type="file"
-                          accept="image/*" // Accept only image formats
-                          className="sr-only"
-                          onChange={handleGenuineFileChange}
-                        />
-                      </label>
-                    </div>
-                  </div>
-                )}
-              </div>
+          {/* Genuine Signature Upload */}
+          <div style={{ marginBottom: "20px" }}>
+            <label
+              htmlFor="genuine-signature"
+              style={{ display: "block", fontWeight: "bold", marginBottom: "10px" }}
+            >
+              Genuine Signature
+            </label>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                border: "2px dashed #ccc",
+                borderRadius: "8px",
+                padding: "20px",
+                height: "150px",
+                marginBottom: "20px",
+                alignItems: "center",
+                overflow: "hidden",
+              }}
+            >
+              {genuineImagePreview ? (
+                <div style={{ textAlign: "center" }}>
+                  <img
+                    src={genuineImagePreview}
+                    alt="Genuine Signature Preview"
+                    style={{ maxHeight: "100%", maxWidth: "100%" }}
+                  />
+                  <button
+                    type="button"
+                    onClick={resetGenuineImage}
+                    style={{
+                      marginTop: "10px",
+                      backgroundColor: "white",
+                      color: "#007bff",
+                      padding: "5px 10px",
+                      borderRadius: "8px",
+                      border: "none",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Change Image
+                  </button>
+                </div>
+              ) : (
+                <label
+                  htmlFor="genuine-signature"
+                  style={{
+                    cursor: "pointer",
+                    color: "#007bff",
+                    textDecoration: "underline",
+                  }}
+                >
+                  Upload Signature
+                  <input
+                    type="file"
+                    id="genuine-signature"
+                    accept="image/*"
+                    onChange={handleGenuineFileChange}
+                    style={{ display: "none" }}
+                  />
+                </label>
+              )}
             </div>
+          </div>
 
-            <div>
-              <button
-                type="submit"
-                className="flex w-full justify-center rounded-md bg-blue-700	 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500	 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-700	"
-              >
-                Create
-              </button>
-            </div>
-          </form>
-        </div>
+          {/* Submit Button */}
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <button
+              type="submit"
+              style={{
+                backgroundColor: "#007bff",
+                color: "#fff",
+                padding: "10px 20px",
+                borderRadius: "8px",
+                fontWeight: "bold",
+                width: "100%",
+                textAlign: "center",
+              }}
+            >
+              Create User
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

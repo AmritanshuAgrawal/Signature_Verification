@@ -1,7 +1,9 @@
 import React, { useState, useEffect, Fragment } from "react";
+import { Link } from "react-router-dom";
 import { PhotoIcon } from "@heroicons/react/24/solid";
 import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import bgImage from "../images/bg.jpeg";
 
 const Form = () => {
   const [users, setUsers] = useState([]);
@@ -10,7 +12,6 @@ const Form = () => {
   const [forgedImageFile, setForgedImageFile] = useState(null);
   const [forgedImagePreview, setForgedImagePreview] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [verificationResults, setVerificationResults] = useState({
     classification: "",
@@ -42,7 +43,7 @@ const Form = () => {
 
   const handleUserSelection = (event) => {
     const userEmail = event.target.value;
-    const user = users.find((user) => user.email === userEmail); // Use email instead of id
+    const user = users.find((user) => user.email === userEmail);
     setSelectedUser(user);
     if (user) {
       setGenuineImagePreview(user.signature_image);
@@ -60,7 +61,6 @@ const Form = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
-
     const reader = new FileReader();
     reader.readAsDataURL(forgedImageFile);
     reader.onload = async () => {
@@ -70,16 +70,15 @@ const Form = () => {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            image1: selectedUser.signature_image, // Genuine image already in base64
-            image2: base64ForgedSignature, // Forged image converted to base64
+            image1: selectedUser.signature_image,
+            image2: base64ForgedSignature,
           }),
         });
         const result = await response.json();
-        console.log(result);
-        setVerificationResults(result); // Save the results
-        setIsDialogOpen(true); // Open the dialog
+        setVerificationResults(result);
+        setIsDialogOpen(true);
       } catch (error) {
-        console.error("Error submitting form:", error);
+        console.error("Error verifying signature:", error);
       } finally {
         setIsLoading(false);
         setGenuineImagePreview(null);
@@ -89,110 +88,152 @@ const Form = () => {
   };
 
   return (
-    <div className="mx-auto max-w-4xl p-8">
-      <div>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        paddingTop: "50px",
+      }}
+    >
+      <div
+        style={{
+          backgroundColor: "rgba(255, 255, 255, 0.9)",
+          padding: "20px",
+          borderRadius: "16px",
+          width: "60%",
+          maxWidth: "800px",
+          boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)",
+          textAlign: "center",
+        }}
+      >
+        <h1 style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "20px" }}>
+          Signature Verification
+        </h1>
+
         <label
           htmlFor="user-select"
-          className="block text-sm font-medium text-gray-900"
+          style={{ display: "block", fontWeight: "bold", marginBottom: "10px" }}
         >
-          Select User:
+          Select User
         </label>
-        <div className="mt-1 relative">
-          <select
-            id="user-select"
-            className="appearance-none block w-full px-3 py-2 border border-gray-300 text-base rounded-md shadow-sm placeholder-gray-500 focus:outline-none focus:ring-blue-500	 focus:border-blue-500	 sm:text-sm"
-            onChange={handleUserSelection}
-            value={selectedUser ? selectedUser.email : ""} // Use email instead of id
-          >
-            <option value="" key="Null">
-              Select a user
+        <select
+          id="user-select"
+          onChange={handleUserSelection}
+          value={selectedUser?.email || ""}
+          style={{
+            width: "100%",
+            padding: "10px",
+            border: "1px solid #ccc",
+            borderRadius: "8px",
+            marginBottom: "20px",
+          }}
+        >
+          <option value="">-- Select a User --</option>
+          {users.map((user) => (
+            <option key={user.email} value={user.email}>
+              {user.name}
             </option>
-            {users.map((user) => (
-              <option key={user.email} value={user.email}>
-                {" "}
-                {user.name}
-              </option>
-            ))}
-          </select>
-          <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-            <svg
-              className="h-4 w-4 fill-current"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-            >
-              <path d="M5.292 7.293a1 1 0 011.414 0L10 10.586l3.294-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-            </svg>
-          </div>
-        </div>
-      </div>
+          ))}
+        </select>
 
-      <form onSubmit={handleSubmit} className="space-y-8 mt-4">
-        {/* Genuine Signature Display */}
-        <div>
-          <label className="block text-sm font-medium leading-6 text-gray-900">
-            Genuine Signature
-          </label>
-          <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 p-6">
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginBottom: "20px",
+          }}
+        >
+          <div
+            style={{
+              width: "45%",
+              border: "2px dashed #ccc",
+              borderRadius: "8px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              overflow: "hidden",
+              height: "150px",
+            }}
+          >
             {genuineImagePreview ? (
               <img
                 src={genuineImagePreview}
-                alt="Genuine Signature Preview"
-                className="max-h-60"
+                alt="Genuine Signature"
+                style={{ maxWidth: "100%", maxHeight: "100%" }}
               />
             ) : (
-              <div className="space-y-1 text-center">
-                <PhotoIcon className="mx-auto h-12 w-12 text-gray-400" />
-                <p className="text-sm text-gray-600">No signature loaded</p>
-              </div>
+              <p style={{ color: "#888", fontSize: "14px" }}>No Signature Loaded</p>
             )}
           </div>
-        </div>
 
-        {/* Forged Signature Upload */}
-        <div>
-          <label className="block text-sm font-medium leading-6 text-gray-900">
-            Upload Forged Signature
-          </label>
-          <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 p-6">
+          <div
+            style={{
+              width: "45%",
+              border: "2px dashed #ccc",
+              borderRadius: "8px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              overflow: "hidden",
+              height: "150px",
+            }}
+          >
             {forgedImagePreview ? (
               <img
                 src={forgedImagePreview}
-                alt="Forged Signature Preview"
-                className="max-h-60"
+                alt="Forged Signature"
+                style={{ maxWidth: "100%", maxHeight: "100%" }}
               />
             ) : (
-              <div className="space-y-1 text-center">
-                <PhotoIcon className="mx-auto h-12 w-12 text-gray-400" />
-                <div className="flex text-sm text-gray-600">
-                  <label
-                    htmlFor="forged-signature"
-                    className="relative cursor-pointer rounded-md bg-white text-blue-700 focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2 hover:text-blue-500	"
-                  >
-                    <span>Upload a file</span>
-                    <input
-                      id="forged-signature"
-                      name="forgedSignature"
-                      type="file"
-                      className="sr-only"
-                      onChange={handleForgedFileChange}
-                    />
-                  </label>
-                </div>
-              </div>
+              <label style={{ cursor: "pointer", color: "#007bff" }}>
+                Upload Image
+                <input
+                  type="file"
+                  onChange={handleForgedFileChange}
+                  style={{ display: "none" }}
+                />
+              </label>
             )}
           </div>
         </div>
 
-        {/* Submit Button */}
-        <div>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <Link
+            to="/createUser"
+            style={{
+              backgroundColor: "#007bff",
+              color: "#fff",
+              padding: "10px 20px",
+              borderRadius: "8px",
+              textDecoration: "none",
+              fontWeight: "bold",
+              textAlign: "center",
+              flex: 1,
+              marginRight: "10px",
+            }}
+          >
+            Create User
+          </Link>
           <button
-            type="submit"
-            className="text-sm font-semibold leading-6 text-white border bg-blue-700 border-transparent rounded-md shadow-sm px-4 py-2 w-full transition duration-150 ease-in-out hover:bg-blue-500 focus:outline-none focus:border-blue-900 focus:ring focus:ring-blue-300 focus:ring-opacity-50"
+            onClick={handleSubmit}
+            style={{
+              backgroundColor: "#007bff",
+              color: "#fff",
+              padding: "10px 20px",
+              borderRadius: "8px",
+              fontWeight: "bold",
+              flex: 1,
+            }}
           >
             {isLoading ? "Processing..." : "Verify"}
           </button>
         </div>
-      </form>
 
       <Transition.Root show={isDialogOpen} as={Fragment}>
         <Dialog
@@ -269,6 +310,7 @@ const Form = () => {
           </div>
         </Dialog>
       </Transition.Root>
+      </div>
     </div>
   );
 };

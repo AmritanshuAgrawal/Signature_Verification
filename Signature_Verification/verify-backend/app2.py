@@ -227,7 +227,7 @@ class SiameseModel(nn.Module):
         super(SiameseModel, self).__init__()
 
         self.model = SigNet()
-        state_dict, _, _ = torch.load("signet.pth", map_location="mps")
+        state_dict, _, _ = torch.load("./model/signet.pth", map_location="cpu")
         self.model.load_state_dict(state_dict)
 
         self.probs = nn.Linear(4, 1)
@@ -260,13 +260,14 @@ class SiameseModel(nn.Module):
 # Load your trained model
 model = SiameseModel()
 # model.load_state_dict(torch.load("signet.pth", map_location='cpu'))  # Adjust the path as necessary
-model.load_state_dict((torch.load('/Users/megha/Documents/Signature-Verification-main-3-main/verify-backend/best_model_21.pt', weights_only=False , map_location='mps'))['model'])
+model.load_state_dict((torch.load('./model/best_model_21.pt', weights_only=False , map_location='cpu'))['model'])
 # print(torch.load('best_model_21.pt', weights_only=False)) # For testing
 model.eval()
 model.to('cpu')
 
 # Connect to MongoDB
-client = MongoClient("mongodb://localhost:27017/")
+client = MongoClient(os.getenv('MONGODB_URI'))
+print('Connection has been established with MongoDB succesfully!')
 db = client["signature_verification"]  # Database name
 users_collection = db["users"]  # Collection name
 
@@ -334,5 +335,5 @@ def home():
     return "Hello, testing..."
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port='8000', host='0.0.0.0')
     

@@ -12,7 +12,7 @@ function Signup() {
     e.preventDefault();
     try {
       await axios
-        .post("http://localhost:8000/signup", { email, password })
+        .post("http://localhost:3000/signup", { email, password })
         .then((res) => {
           if (res.data === "exist") {
             alert("User already exists");

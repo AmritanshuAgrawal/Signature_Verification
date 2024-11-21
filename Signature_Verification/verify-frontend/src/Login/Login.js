@@ -23,7 +23,7 @@ function Login() {
     setError('');
 
     try {
-      const response = await axios.post("http://localhost:8000/", formData);
+      const response = await axios.post("http://localhost:3000/", formData);
 
       if (response.data === "exist") {
         navigate("/form", { state: { id: formData.email } });

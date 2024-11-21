@@ -5,29 +5,29 @@ import bgImage from "../images/bg.jpeg";
 
 function Signup() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   async function submit(e) {
     e.preventDefault();
+
     try {
-      await axios
-        .post("http://localhost:3000/signup", { email, password })
-        .then((res) => {
-          if (res.data === "exist") {
-            alert("User already exists");
-          } else if (res.data === "notexist") {
-            navigate("/form", { state: { id: email } });
-          }
-        })
-        .catch((e) => {
-          alert("Wrong details");
-          console.log(e);
+        const response = await axios.post("http://localhost:8000/signup", {
+            email,
+            password,
         });
-    } catch (e) {
-      console.log(e);
+
+        alert(response.data.message);
+        navigate("/", { state: { id: email } });
+    } catch (error) {
+        if (error.response && error.response.data.message) {
+            alert(error.response.data.message);
+        } else {
+            alert("An error occurred. Please try again.");
+        }
     }
-  }
+}
+
 
   return (
     <div
@@ -73,15 +73,15 @@ function Signup() {
               background: "rgba(255, 255, 255, 0.1)",
               borderRadius: "16px",
               backdropFilter: "blur(15px)",
-              WebkitBackdropFilter: "blur(15px)", 
+              WebkitBackdropFilter: "blur(15px)", // Safari compatibility
               padding: "20px",
               textAlign: "center",
               color: "#fff",
               boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)",
-              display: "flex", 
-              flexDirection: "column", 
-              justifyContent: "center", 
-              alignItems: "center"
+              display: "flex", // Added flexbox
+              flexDirection: "column", // Stack elements vertically
+              justifyContent: "center", // Vertically center the content
+              alignItems: "center", // Horizontally center the content
             }}
           >
             <h1

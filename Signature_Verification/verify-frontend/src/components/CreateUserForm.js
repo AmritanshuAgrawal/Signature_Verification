@@ -33,7 +33,7 @@ const CreateUserForm = () => {
       genuineSignature: genuineImagePreview, // Base64 encoded string
     };
 
-    const response = await fetch("http://127.0.0.1:5000/create_user", {
+    const response = await fetch("http://localhost:8000/create_user", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

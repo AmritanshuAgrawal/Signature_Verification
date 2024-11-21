@@ -1,58 +1,80 @@
 import express from "express";
 import cors from "cors";
 import collection from "./mongo.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const app = express();
+const SECRET_KEY = "SECRET"; // Replace with a strong secret key
 
-// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-// Health check
-app.get("/", (req, res) => {
-  res.send("API is working!");
-});
+// JWT middleware for protected routes (if needed in future)
+const authenticateToken = (req, res, next) => {
+    const token = req.headers["authorization"];
+    if (!token) return res.status(401).send("Access Denied");
 
-// Login route
+    jwt.verify(token, SECRET_KEY, (err, user) => {
+        if (err) return res.status(403).send("Invalid Token");
+        req.user = user;
+        next();
+    });
+};
+
+// Login Route
 app.post("/", async (req, res) => {
-  const { email, password } = req.body;
+    const { email, password } = req.body;
 
-  try {
-    const check = await collection.findOne({ email });
-    if (check) {
-      return res.json("exist");
-    } else {
-      return res.json("notexist");
+    try {
+        const user = await collection.findOne({ email: email });
+
+        if (!user) {
+            return res.status(404).json({ message: "User does not exist" });
+        }
+
+        const validPassword = await bcrypt.compare(password, user.password);
+        if (!validPassword) {
+            return res.status(400).json({ message: "Wrong password" });
+        }
+
+        // Generate JWT Token
+        const token = jwt.sign({ email: user.email }, SECRET_KEY, {
+            expiresIn: "1h", // Token expires in 1 hour
+        });
+
+        res.status(200).json({ token });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Server Error" });
     }
-  } catch (error) {
-    console.error("Error during login:", error);
-    return res.json("fail");
-  }
 });
 
-// Signup route
+// Signup Route
 app.post("/signup", async (req, res) => {
-  const { email, password } = req.body;
+    const { email, password } = req.body;
 
-  try {
-    const check = await collection.findOne({ email });
+    try {
+        const userExists = await collection.findOne({ email: email });
 
-    if (check) {
-      return res.json("exist");
-    } else {
-      const newUser = new collection({ email, password });
-      await newUser.save();
-      return res.json("notexist");
+        if (userExists) {
+            return res.status(400).json({ message: "User already exists" });
+        }
+
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = new collection({ email: email, password: hashedPassword });
+        await newUser.save();
+
+        res.status(201).json({ message: "User created successfully" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Server Error" });
     }
-  } catch (error) {
-    console.error("Error during signup:", error);
-    return res.json("fail");
-  }
 });
 
-// Start server
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(4000, () => {
+    console.log("Server running on port 4000");
 });

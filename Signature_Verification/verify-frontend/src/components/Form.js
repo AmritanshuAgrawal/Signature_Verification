@@ -23,7 +23,7 @@ const Form = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:5000/get_users", {
+        const response = await fetch("http://127.0.0.1:8000/get_users", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -66,7 +66,7 @@ const Form = () => {
     reader.onload = async () => {
       const base64ForgedSignature = reader.result;
       try {
-        const response = await fetch("http://127.0.0.1:5000/verify_signature", {
+        const response = await fetch("http://127.0.0.1:8000/verify_signature", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

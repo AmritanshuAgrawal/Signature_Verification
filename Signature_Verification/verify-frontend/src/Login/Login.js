@@ -5,36 +5,32 @@ import bgImage from "../images/bg.jpeg";
 
 function Login() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
-  const [error, setError] = useState('');
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const submit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     try {
-      const response = await axios.post("http://localhost:3000/", formData);
+        const response = await axios.post("http://localhost:8000/", formData);
 
-      if (response.data === "exist") {
+        // Save JWT token in localStorage
+        localStorage.setItem("token", response.data.token);
+
         navigate("/form", { state: { id: formData.email } });
-      } else if (response.data === "notexist") {
-        setError("User has not signed up");
-      }
     } catch (error) {
-      setError("An error occurred. Please try again.");
-      console.error(error);
+        if (error.response && error.response.data.message) {
+            setError(error.response.data.message);
+        } else {
+            setError("An error occurred. Please try again.");
+        }
     }
-  };
+};
 
   return (
     <div
@@ -47,6 +43,7 @@ function Login() {
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
+        minWidth: "1000px",
       }}
     >
       {/* Outer Container */}

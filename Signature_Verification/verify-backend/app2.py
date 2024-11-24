@@ -12,7 +12,9 @@ from collections import OrderedDict
 from typing import Tuple
 from pymongo import MongoClient
 import os
-
+from werkzeug.security import generate_password_hash, check_password_hash
+import jwt
+import datetime
 load_dotenv()
 
 app = Flask(__name__)
@@ -330,9 +332,83 @@ def verify_signature():
     except Exception as e:
         return jsonify({'error': 'Failed to process images', 'message': str(e)}), 500
 
-@app.route('/', methods=['GET'])
-def home():
-    return "Hello, testing..."
+app.config['SECRET_KEY'] = 'SECRET'  # Replace with a strong secret key
+
+# MongoDB setup
+# client = MongoClient("mongodb://localhost:27017/")  # Adjust MongoDB URI if needed
+# db = client['signature_verification']  # Replace with your database name
+collection = db['admin']  # Replace with your collection name
+# collection_admin = db['admin']
+# CORS configuration
+cors = CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
+
+# JWT middleware for protected routes (if needed in future)
+def authenticate_token(f):
+    def wrapper(*args, **kwargs):
+        token = request.headers.get("Authorization")
+        if not token:
+            return jsonify({"message": "Access Denied"}), 401
+        try:
+            decoded = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+            request.user = decoded
+        except jwt.ExpiredSignatureError:
+            return jsonify({"message": "Token Expired"}), 403
+        except jwt.InvalidTokenError:
+            return jsonify({"message": "Invalid Token"}), 403
+        return f(*args, **kwargs)
+    return wrapper
+
+# Login Route
+@app.route("/", methods=["POST"])
+def login():
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
+
+    try:
+        user = collection.find_one({"email": email})
+        if not user:
+            return jsonify({"message": "User does not exist"}), 404
+
+        if not check_password_hash(user['password'], password):
+            return jsonify({"message": "Wrong password"}), 400
+
+        # Generate JWT Token
+        token = jwt.encode(
+            {"email": user['email'], "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)},
+            app.config['SECRET_KEY'],
+            algorithm="HS256"
+        )
+        return jsonify({"token": token}), 200
+
+    except Exception as e:
+        print(e)
+        return jsonify({"message": "Server Error"}), 500
+
+# Signup Route
+@app.route("/signup", methods=["POST"])
+def signup():
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
+
+    try:
+        user_exists = collection.find_one({"email": email})
+        if user_exists:
+            return jsonify({"message": "User already exists"}), 400
+
+        # Hash the password
+        hashed_password = generate_password_hash(password)
+
+        # Save new user
+        new_user = {"email": email, "password": hashed_password}
+        collection.insert_one(new_user)
+
+        return jsonify({"message": "User created successfully"}), 201
+
+    except Exception as e:
+        print(e)
+        return jsonify({"message": "Server Error"}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, port='8000', host='0.0.0.0')

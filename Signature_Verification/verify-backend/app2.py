@@ -19,7 +19,7 @@ from huggingface_hub import hf_hub_download
 load_dotenv()
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/*": {"origins": "https://signature-verification-chi.vercel.app/"}})
+cors = CORS(app, resources={r"/*": {"origins": "https://signature-verification-chi.vercel.app"}})
 
 
 def normalize_image(img: np.ndarray,

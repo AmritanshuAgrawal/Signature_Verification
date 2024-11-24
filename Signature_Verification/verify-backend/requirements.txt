@@ -1,6 +1,7 @@
 bcrypt
 flask
 flask-cors
+gunicorn
 matplotlib
 numpy
 pyjwt

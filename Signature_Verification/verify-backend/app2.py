@@ -15,6 +15,7 @@ import os
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 import datetime
+from huggingface_hub import hf_hub_download
 load_dotenv()
 
 app = Flask(__name__)
@@ -229,7 +230,11 @@ class SiameseModel(nn.Module):
         super(SiameseModel, self).__init__()
 
         self.model = SigNet()
-        state_dict, _, _ = torch.load("./model/signet.pth", map_location="cpu")
+        # state_dict, _, _ = torch.load("./model/signet.pth", map_location="cpu")
+        # self.model.load_state_dict(state_dict)
+
+        signet_weights_path= hf_hub_download(repo_id='meghamittal/signature-verification-model-weights', filename='signet.pth')
+        state_dict, _, _ = torch.load(signet_weights_path, map_location="cpu")
         self.model.load_state_dict(state_dict)
 
         self.probs = nn.Linear(4, 1)
@@ -259,19 +264,33 @@ class SiameseModel(nn.Module):
         return embedding1, embedding2, output
     
 
-# Load your trained model
-model = SiameseModel()
-# model.load_state_dict(torch.load("signet.pth", map_location='cpu'))  # Adjust the path as necessary
-model.load_state_dict((torch.load('./model/best_model_21.pt', weights_only=False , map_location='cpu'))['model'])
-# print(torch.load('best_model_21.pt', weights_only=False)) # For testing
+file_path = hf_hub_download(repo_id="meghamittal/signature-verification-model-weights", filename="best_model_21.pt")
+
+model= SiameseModel()
+
+checkpoint = torch.load(file_path, map_location='cpu')
+model.load_state_dict(checkpoint['model'])
 model.eval()
 model.to('cpu')
+
+# # Load your trained model
+# model = SiameseModel()
+# # model.load_state_dict(torch.load("signet.pth", map_location='cpu'))  # Adjust the path as necessary
+# model.load_state_dict((torch.load('./model/best_model_21.pt', weights_only=False , map_location='cpu'))['model'])
+# # print(torch.load('best_model_21.pt', weights_only=False)) # For testing
+# model.eval()
+# model.to('cpu')
 
 # Connect to MongoDB
 client = MongoClient(os.getenv('MONGODB_URI'))
 print('Connection has been established with MongoDB succesfully!')
 db = client["signature_verification"]  # Database name
 users_collection = db["users"]  # Collection name
+
+# @app.route('/', methods=['GET'])
+# def test():
+#     print("testing!!")
+#     return "Testing!!", 200  # Return a response to the client
 
 @app.route('/create_user', methods=['POST'])
 def create_user():

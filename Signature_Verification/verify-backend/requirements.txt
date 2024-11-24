@@ -2,6 +2,7 @@ bcrypt
 flask
 flask-cors
 gunicorn
+huggingface_hub
 matplotlib
 numpy
 pyjwt

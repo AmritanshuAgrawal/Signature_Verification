@@ -33,13 +33,16 @@ const CreateUserForm = () => {
       genuineSignature: genuineImagePreview, // Base64 encoded string
     };
 
-    const response = await fetch("http://localhost:8000/create_user", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+    const response = await fetch(
+      "https://signature-verification-br6q.onrender.com/create_user",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      }
+    );
     const data = await response.json();
     console.log(data);
 
@@ -74,7 +77,9 @@ const CreateUserForm = () => {
           textAlign: "center",
         }}
       >
-        <h1 style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "20px" }}>
+        <h1
+          style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "20px" }}
+        >
           Create a User
         </h1>
 
@@ -83,7 +88,11 @@ const CreateUserForm = () => {
           <div style={{ marginBottom: "20px" }}>
             <label
               htmlFor="name"
-              style={{ display: "block", fontWeight: "bold", marginBottom: "10px" }}
+              style={{
+                display: "block",
+                fontWeight: "bold",
+                marginBottom: "10px",
+              }}
             >
               Name
             </label>
@@ -108,7 +117,11 @@ const CreateUserForm = () => {
           <div style={{ marginBottom: "20px" }}>
             <label
               htmlFor="email"
-              style={{ display: "block", fontWeight: "bold", marginBottom: "10px" }}
+              style={{
+                display: "block",
+                fontWeight: "bold",
+                marginBottom: "10px",
+              }}
             >
               Email Address
             </label>
@@ -133,7 +146,11 @@ const CreateUserForm = () => {
           <div style={{ marginBottom: "20px" }}>
             <label
               htmlFor="genuine-signature"
-              style={{ display: "block", fontWeight: "bold", marginBottom: "10px" }}
+              style={{
+                display: "block",
+                fontWeight: "bold",
+                marginBottom: "10px",
+              }}
             >
               Genuine Signature
             </label>

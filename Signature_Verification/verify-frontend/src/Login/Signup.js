@@ -12,22 +12,24 @@ function Signup() {
     e.preventDefault();
 
     try {
-        const response = await axios.post("http://localhost:8000/signup", {
-            email,
-            password,
-        });
-
-        alert(response.data.message);
-        navigate("/", { state: { id: email } });
-    } catch (error) {
-        if (error.response && error.response.data.message) {
-            alert(error.response.data.message);
-        } else {
-            alert("An error occurred. Please try again.");
+      const response = await axios.post(
+        "https://signature-verification-br6q.onrender.com/signup",
+        {
+          email,
+          password,
         }
-    }
-}
+      );
 
+      alert(response.data.message);
+      navigate("/", { state: { id: email } });
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        alert(error.response.data.message);
+      } else {
+        alert("An error occurred. Please try again.");
+      }
+    }
+  }
 
   return (
     <div

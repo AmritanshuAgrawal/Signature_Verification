@@ -18,7 +18,7 @@ import datetime
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+cors = CORS(app, resources={r"/*": {"origins": "https://signature-verification-ashy.vercel.app/"}})
 
 def normalize_image(img: np.ndarray,
                     canvas_size: Tuple[int, int] = (1360,952)) -> np.ndarray:
@@ -340,7 +340,6 @@ app.config['SECRET_KEY'] = 'SECRET'  # Replace with a strong secret key
 collection = db['admin']  # Replace with your collection name
 # collection_admin = db['admin']
 # CORS configuration
-cors = CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 # JWT middleware for protected routes (if needed in future)
 def authenticate_token(f):

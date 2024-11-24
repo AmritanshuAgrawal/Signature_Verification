@@ -17,23 +17,20 @@ function Login() {
     setError("");
 
     try {
-      const response = await axios.post(
-        "https://signature-verification-br6q.onrender.com/",
-        formData
-      );
+        const response = await axios.post("https://signature-verification-dtvv.onrender.com/", formData);
 
-      // Save JWT token in localStorage
-      localStorage.setItem("token", response.data.token);
+        // Save JWT token in localStorage
+        localStorage.setItem("token", response.data.token);
 
-      navigate("/form", { state: { id: formData.email } });
+        navigate("/form", { state: { id: formData.email } });
     } catch (error) {
-      if (error.response && error.response.data.message) {
-        setError(error.response.data.message);
-      } else {
-        setError("An error occurred. Please try again.");
-      }
+        if (error.response && error.response.data.message) {
+            setError(error.response.data.message);
+        } else {
+            setError("An error occurred. Please try again.");
+        }
     }
-  };
+};
 
   return (
     <div

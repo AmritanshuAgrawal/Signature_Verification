@@ -430,5 +430,4 @@ def signup():
         return jsonify({"message": "Server Error"}), 500
 
 
-app.run(debug=True, port='8000', host='0.0.0.0')
-    
+app.run(port='8000', host='0.0.0.0', debug=False)

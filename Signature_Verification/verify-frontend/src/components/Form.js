@@ -23,14 +23,17 @@ const Form = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/get_users", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          mode: "cors", // Explicitly state we want CORS
-        });
+        const response = await fetch(
+          "https://signature-verification-dtvv.onrender.com/get_users",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            mode: "cors", // Explicitly state we want CORS
+          }
+        );
         const data = await response.json();
         setUsers(data); // Remove .data since your endpoint returns the array directly
         console.log(data);
@@ -66,14 +69,17 @@ const Form = () => {
     reader.onload = async () => {
       const base64ForgedSignature = reader.result;
       try {
-        const response = await fetch("http://127.0.0.1:8000/verify_signature", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            image1: selectedUser.signature_image,
-            image2: base64ForgedSignature,
-          }),
-        });
+        const response = await fetch(
+          "https://signature-verification-dtvv.onrender.com/verify_signature",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              image1: selectedUser.signature_image,
+              image2: base64ForgedSignature,
+            }),
+          }
+        );
         const result = await response.json();
         setVerificationResults(result);
         setIsDialogOpen(true);
@@ -112,7 +118,9 @@ const Form = () => {
           textAlign: "center",
         }}
       >
-        <h1 style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "20px" }}>
+        <h1
+          style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "20px" }}
+        >
           Signature Verification
         </h1>
 
@@ -168,7 +176,9 @@ const Form = () => {
                 style={{ maxWidth: "100%", maxHeight: "100%" }}
               />
             ) : (
-              <p style={{ color: "#888", fontSize: "14px" }}>No Signature Loaded</p>
+              <p style={{ color: "#888", fontSize: "14px" }}>
+                No Signature Loaded
+              </p>
             )}
           </div>
 
@@ -235,81 +245,82 @@ const Form = () => {
           </button>
         </div>
 
-      <Transition.Root show={isDialogOpen} as={Fragment}>
-        <Dialog
-          as="div"
-          className="relative z-10"
-          onClose={() => setIsDialogOpen(false)}
-        >
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
+        <Transition.Root show={isDialogOpen} as={Fragment}>
+          <Dialog
+            as="div"
+            className="relative z-10"
+            onClose={() => setIsDialogOpen(false)}
           >
-            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-          </Transition.Child>
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            </Transition.Child>
 
-          <div className="fixed inset-0 z-10 overflow-y-auto">
-            <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                enterTo="opacity-100 translate-y-0 sm:scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-              >
-                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                  <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                    <div className="sm:flex sm:items-start">
-                      <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
-                        <ExclamationTriangleIcon
-                          className="h-6 w-6 text-green-600"
-                          aria-hidden="true"
-                        />
-                      </div>
-                      <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                        <Dialog.Title
-                          as="h3"
-                          className="text-lg leading-6 font-medium text-gray-900"
-                        >
-                          Verification Results
-                        </Dialog.Title>
-                        <div className="mt-2">
-                          <p className="text-sm text-gray-500">
-                            Similarity: {verificationResults.similarity}
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            Classification: {verificationResults.classification}
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            Confidence:{" "}
-                            {verificationResults.confidence.toFixed(2)}
-                          </p>
+            <div className="fixed inset-0 z-10 overflow-y-auto">
+              <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                  enterTo="opacity-100 translate-y-0 sm:scale-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                  leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                >
+                  <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                    <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                      <div className="sm:flex sm:items-start">
+                        <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
+                          <ExclamationTriangleIcon
+                            className="h-6 w-6 text-green-600"
+                            aria-hidden="true"
+                          />
+                        </div>
+                        <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                          <Dialog.Title
+                            as="h3"
+                            className="text-lg leading-6 font-medium text-gray-900"
+                          >
+                            Verification Results
+                          </Dialog.Title>
+                          <div className="mt-2">
+                            <p className="text-sm text-gray-500">
+                              Similarity: {verificationResults.similarity}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              Classification:{" "}
+                              {verificationResults.classification}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              Confidence:{" "}
+                              {verificationResults.confidence.toFixed(2)}
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                    <button
-                      type="button"
-                      className="inline-flex w-full justify-center rounded-md bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
-                      onClick={() => setIsDialogOpen(false)}
-                    >
-                      Close
-                    </button>
-                  </div>
-                </Dialog.Panel>
-              </Transition.Child>
+                    <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                      <button
+                        type="button"
+                        className="inline-flex w-full justify-center rounded-md bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
+                        onClick={() => setIsDialogOpen(false)}
+                      >
+                        Close
+                      </button>
+                    </div>
+                  </Dialog.Panel>
+                </Transition.Child>
+              </div>
             </div>
-          </div>
-        </Dialog>
-      </Transition.Root>
+          </Dialog>
+        </Transition.Root>
       </div>
     </div>
   );
